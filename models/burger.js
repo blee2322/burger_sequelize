@@ -1,24 +1,20 @@
-var orm = require("../config/orm.js");
-
-var burger = {
-  //callback functions go here
-  all: function(cb) {
-    orm.all("burgers", function(res) {
-      cb(res);
-    });
-  },
-
-  create: function(cols, vals, cb) {
-    orm.create("burgers", cols, vals, function(res) {
-      cb(res);
-    });
-  },
-
-  update: function(objColVals, condition, cb) {
-    orm.update("burgers", objColVals, condition, function(res) {
-      cb(res);
-    });
-  }
+module.exports = function(sequelize) {
+  var burgers = sequelize.define("burgers", {
+    id:{
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    devour: {
+      type:DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    createdAt: Sequelize.DATE
+  });
+  return Burger;
 };
-
-module.exports = burger;

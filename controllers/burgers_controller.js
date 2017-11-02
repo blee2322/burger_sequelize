@@ -4,25 +4,29 @@ var router = express.Router();
 
 // Import the model (cat.js) to use its database functions.
 var burger = require("../models/burger.js");
+var sequelizeConnection = burger.sequelize;
+sequelizeConnection.sync();
 //this will have host our routes
 router.get("/", function(req, res) {
-  burger.all(function(data) {
+  burger.burgers.findAll({})
+  .then(function(data) {
     var hbsObject = {
       burger: data
     };
     console.log(hbsObject);
     res.render("index", hbsObject);
-  });
+  })
 });
 
 router.post("/api/burgers", function(req, res) {
-  burger.create([
-    "name"
-  ], [  
-    req.body.name
-  ], function(result) {
-    res.json({id: result.insertId});
-  });
+  burger.burgers.create(
+  {
+    name: req.body.name,
+    devour: false
+  }
+  ).then(function() {
+    res.redirect("index");
+  })
 });
 
 router.put("/api/burgers/:id", function(req, res) {
